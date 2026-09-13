@@ -11,12 +11,13 @@ E   = 200e9;    % Módulo de Young [Pa]
 % Parámetros de carga/geométricos de ejemplo (ajustar según la firma de fatigaEje):
 % Aquí se asumen nombres de parámetros típicos: M_a (momento alternante), M_m (momento medio),
 % d (diámetro del eje), kf (factor de concentración de la forma), ka/kb/... (factores de modificación).
-M_a = 93.4973;      % Momento alternante [N·m]
+M_a = 89.3775;      % Momento flector alternante [N·m]
 M_m = 0;       % Momento medio [N·m]
 T_a = 260.576 ; % Torque alternante [N·m]
 T_m = 0 ; % Torque 0[N·m]
 d   = 50*0.001;     % Diámetro del eje [m]
 kf  = 1.0;      % Factor de concentración de la forma (ejemplo)
+kmisc  = 1.0;      % Factor de concentración de la forma (ejemplo)
 ka  = 1.0; kb = 1.0; kc = 1.0; kd = 1.0; ke = 1.0; % factores de Marin/others
 reliabilidad = 0.99;
 % Construir estructura o lista de parámetros según la interfaz de fatigaEje
@@ -29,17 +30,21 @@ params.loading_type = 'combined';
 params.E   = E;
 params.d   = d;
 params.kf  = kf;
-params.ka = ka; 
-params.kb = kb; 
-params.kc = kc; 
-params.kd = kd; 
-params.ke = ke; 
-params.Mt = M_a;
+%params.ka = ka; 
+%params.kb = kb; 
+%params.kc = kc; 
+%params.kd = kd; 
+%params.ke = ke; 
+params.kf = kf; 
+params.kmisc = kmisc; 
+params.Malt = M_a;
 params.Mm = M_m;
-params.Tt = M_m;
+params.Talt = T_a;
 params.Tm = T_m;
-paramas.Ne = 1e+07; %Queremos operar en la región que no hay fatiga(endurancej)
+params.Ne = 1e+06; %Queremos operar en la región que no hay fatiga(endurancej)
 params.temperature = 25;
+params.user_weight = 150;
+params.jump_factor = 3;%Al saltar, un atleta pone hasta 3 veces su peso sobre la superficie en la que salta
 
 params.reliability = reliabilidad;
 % Llamada a la función (ajustar según la firma real de fatigaEje)

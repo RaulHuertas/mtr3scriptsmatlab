@@ -11,7 +11,7 @@ arguments
 end
 
 % Revisar que los parámetros más importantes hayan sido especificados
-req = {'d','Mt','Mm','Tt','Tm','sigma_uts','sigma_y','surface_finish','loading_type'};
+req = {'d','Malt','Mm','Talt','Tm','sigma_uts','sigma_y','surface_finish','loading_type'};
 for k=1:numel(req)
     if ~isfield(params,req{k})
         error('Missing required field params.%s',req{k});
@@ -23,34 +23,25 @@ if ~isfield(params,'temperature'), params.temperature=25; end
 if ~isfield(params,'reliability'), params.reliability=0.99; end
 
 d = params.d;
-Mt = params.Mt;
-Mm = params.Mm;
-Tt = params.Tt;
-Tm = params.Tm;
 surface = lower(params.surface_finish);
 
-notes = {};
 % 1)  factor de Marin k_a(Superficie)
-if isfield(params,'surface_factor')
-    k_a = params.surface_factor;
-    notes{end+1} = 'Surface factor provided by user.';
-else
-    %valores Shigles pág 296, tabla 6-2
-    switch surface
-        case 'ground'
-            a = 1.58; b = -0.085;
-        case 'machined'
-            a = 4.51; b = -0.265;
-        case 'hot-rolled'
-            a = 57.7; b = -0.718;
-        case 'as-forged'
-            a = 272; b = -0.995;
-        otherwise
-            a = 4.51; b = -0.265; % por defecto se asume que es maquinado
-    end    
-    k_a = a * (UTS/1e6)^b;
-    notes{end+1} = sprintf('Computed surface factor k_a = %.3f', k_a);
-end
+
+%valores Shigles pág 296, tabla 6-2
+switch surface
+    case 'ground'
+        a = 1.58; b = -0.085;
+    case 'machined'
+        a = 4.51; b = -0.265;
+    case 'hot-rolled'
+        a = 57.7; b = -0.718;
+    case 'as-forged'
+        a = 272; b = -0.995;
+    otherwise
+        a = 4.51; b = -0.265; % por defecto se asume que es maquinado
+end    
+k_a = a * (params.sigma_uts/1e6)^b;
+
 
 % 2) Factor de Marin k_b(Tamaño)
 
@@ -63,7 +54,6 @@ elseif d_mm <= 51
 else
     k_b = 0.6; % lower bound
 end
-notes{end+1} = sprintf('Computed size factor k_b = %.3f', k_b);
 
 % 3) Factor de Marin k_c(Carga)
 k_c_bending = factor_kc('bending')
@@ -84,29 +74,52 @@ elseif params.reliability >= 0.95
 elseif params.reliability >= 0.90
     k_e = 0.897;
 end
-notes{end+1} = sprintf('Computed reliability factor k_c = %.3f for reliability=%.3f', k_c, params.reliability);
 
-% Límite de fatiga Se'
-Se_prime = sePrime(params.params.sigma_ut);
+% Límite de fatiga Se', para una pieza de laboratorio
+Se_prime = sePrime(params.sigma_uts);
+
+% 'Se' ajustado para una pieza real(varial el k_c de cada uno)
+Se_bending =    Se_prime*k_a*k_b*k_c_bending*k_d*k_e*params.kf*params.kmisc;
+Se_axial =      Se_prime*k_a*k_b*k_c_axial*k_d*k_e*params.kf*params.kmis;
+Se_torsion =    Se_prime*k_a*k_b*k_c_torsion*k_d*k_e*params.kf*params.kmis;
 
 % Fracción de fuerz de fatiga
-f = params.fatigue_strength_coefficient*power(2*params.Ne,params.fatigue_strength_exponent);
+%f = params.fatigue_strength_coefficient*power(2*params.Ne,params.fatigue_strength_exponent)/params.sigma_uts;
 
-constant_a = ((fs*params.sigma_uts)^2)/Se_prime
-constant_b = -(log(f*params.sigma_uts/Se_prime))
+%constant_a = ((f*params.sigma_uts/1e+06)^2)/Se_prime;
+%constant_b = -(log(f*params.sigma_uts/Se_prime))/3;
+
+% De Shigley pag 314:The slope of the load line shown is defined as Sa/Sm
+
+ShaftCrossArea = pi*(d/2)^2;
+PMI =  pi*(d^4)/32;%%Polar moment of inertia
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%Esfuerzos de torsion%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+torque_stress_alt = params.Talt*(d/2)/PMI;
+torque_stress_mid = params.Tm*(d/2)/PMI;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%Esfuerzos de flexion%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+bending_stress_alt = params.TaMaltlt*(d/2)/PMI;
+bending_stress_mid = params.MmTm*(d/2)/PMI;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%Esfuerzos axial%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Axial stress, asuming the user puts 3 times its weight 
+%on the plataform
+g = 9.8;
+axial_stress_max = params.user_weight*g*jump_factor;
+axial_stress_alt = (axial_stress_max-0)/2;
+axial_stress_mid = (axial_stress_max+0)/2;
+
 
 
 
 return
-
-% 1) Nominal alternating stresses at outer fiber for circular shaft
-% bending stress amplitude: sigma_b = M*c/I, c = d/2, I = pi*d^4/64 -> sigma = 32*M/(pi*d^3)
-sigma_b_alt = 32*Mt/(pi*d^3); % alternating bending amplitude
-sigma_b_mean = 32*Mm/(pi*d^3);
-
-% torsional shear stress amplitude: tau = 16*T/(pi*d^3)
-tau_alt = 16*Tt/(pi*d^3);
-tau_mean = 16*Tm/(pi*d^3);
 
 % 2) Von Mises equivalent stresses (amplitude and mean)
 % alternating equivalent (amplitude): sqrt(sigma_b_alt^2 + 3*tau_alt^2)
