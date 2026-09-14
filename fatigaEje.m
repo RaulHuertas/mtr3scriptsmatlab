@@ -129,6 +129,13 @@ Kf_bending = Kf(params.q_bending, params.kt_bending);
 vonmises_alt = vonMosesAlt(Kf_bending,Kf_tension,Kf_torsion,bending_stress_alt,axial_stress_alt,torque_stress_alt);
 vonmises_mean = vonMosesMean(Kf_bending,Kf_tension,Kf_torsion,bending_stress_mid,axial_stress_mid,torque_stress_mid);
 
+%Shigley pág 326
+firstCycle_max_stress = vonmises_alt+vonmises_mean
+
+%safety factor for first cycle(static)
+SF_firstCycle = Se_prime/firstCycle_max_stress
+
+
 
 % Mostrar valores calculados hasta este punto
 notes = {};
@@ -162,6 +169,8 @@ fprintf('Kf_torsion = %.6g\n', Kf_torsion);
 fprintf('Kf_bending = %.6g\n', Kf_bending);
 fprintf('vonmises_alt = %.6g\n', vonmises_alt);
 fprintf('vonmises_mean = %.6g\n', vonmises_mean);
+fprintf('firstCycle_max_stress = %.6g\n', firstCycle_max_stress);
+fprintf('SF_firstCycle = %.6g\n', SF_firstCycle);
 
 return
 
