@@ -9,7 +9,7 @@ arguments (Output)
     result
 end
 
-mpa = Sut/1e+6
+mpa = Sut/1e+6;
 
 
 if mpa<1400

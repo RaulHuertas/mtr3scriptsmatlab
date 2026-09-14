@@ -133,14 +133,15 @@ vonmises_mean = vonMosesMean(Kf_bending,Kf_tension,Kf_torsion,bending_stress_mid
 firstCycle_max_stress = vonmises_alt+vonmises_mean
 
 %safety factor for first cycle(static)
-SF_firstCycle = Se_prime/firstCycle_max_stress
+SF_fatigue = Se_prime/firstCycle_max_stress;
+SF_firstCycle = params.sigma_y/firstCycle_max_stress;
 
 
 
 % Mostrar valores calculados hasta este punto
 notes = {};
-fprintf('Sut = %.6g m\n', params.sigma_uts);
-fprintf('Sy = %.6g m\n', params.sigma_y);
+fprintf('Sut = %.6g Pa\n', params.sigma_uts);
+fprintf('Sy = %.6g Pa\n', params.sigma_y);
 fprintf('Diameter d = %.6g m\n', d);
 fprintf('Surface finish = %s\n', surface);
 fprintf('k_a (surfac) = %.6g\n', k_a);
@@ -170,6 +171,7 @@ fprintf('Kf_bending = %.6g\n', Kf_bending);
 fprintf('vonmises_alt = %.6g\n', vonmises_alt);
 fprintf('vonmises_mean = %.6g\n', vonmises_mean);
 fprintf('firstCycle_max_stress = %.6g\n', firstCycle_max_stress);
+fprintf('SF_fatigue = %.6g\n', SF_fatigue);
 fprintf('SF_firstCycle = %.6g\n', SF_firstCycle);
 
 return

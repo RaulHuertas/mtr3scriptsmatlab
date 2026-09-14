@@ -4,8 +4,8 @@ close all
 
 % Ejemplo de invocación de la función 'fatigaEje' usando parámetros del acero AISI 1045
 % Suposiciones comunes para AISI 1045 (valores típicos; ajustar según fuente):
-Sut = 725e6;    % Resistencia última a tracción [Pa] 
-Sy  = Sut*0.5;    % Límite elástico [Pa] (0.5 obtenido de shingley)
+Sut = 630e+06;    % Resistencia última a tracción [Pa] 
+Sy  = 530e+06;   % Límite elástico [Pa] (0.5 obtenido de shingley)
 E   = 200e9;    % Módulo de Young [Pa]
 
 % Parámetros de carga/geométricos de ejemplo (ajustar según la firma de fatigaEje):
