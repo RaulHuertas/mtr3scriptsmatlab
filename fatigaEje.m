@@ -125,9 +125,15 @@ Kf_tension = Kf(params.q_bending, params.kt_tension);
 Kf_torsion = Kf(params.q_torsion, params.kt_torsion);
 Kf_bending = Kf(params.q_bending, params.kt_bending);
 
+%Equivalentes segun von mises
+vonmises_alt = vonMosesAlt(Kf_bending,Kf_tension,Kf_torsion,bending_stress_alt,axial_stress_alt,torque_stress_alt);
+vonmises_mean = vonMosesMean(Kf_bending,Kf_tension,Kf_torsion,bending_stress_mid,axial_stress_mid,torque_stress_mid);
+
 
 % Mostrar valores calculados hasta este punto
 notes = {};
+fprintf('Sut = %.6g m\n', params.sigma_uts);
+fprintf('Sy = %.6g m\n', params.sigma_y);
 fprintf('Diameter d = %.6g m\n', d);
 fprintf('Surface finish = %s\n', surface);
 fprintf('k_a (surfac) = %.6g\n', k_a);
@@ -154,15 +160,14 @@ fprintf('Shoulder radius ratio D/d = %.6g\n', D_over_d);
 fprintf('Kf_tension = %.6g\n', Kf_tension);
 fprintf('Kf_torsion = %.6g\n', Kf_torsion);
 fprintf('Kf_bending = %.6g\n', Kf_bending);
-
-
+fprintf('vonmises_alt = %.6g\n', vonmises_alt);
+fprintf('vonmises_mean = %.6g\n', vonmises_mean);
 
 return
 
 % 2) Von Mises equivalent stresses (amplitude and mean)
 % alternating equivalent (amplitude): sqrt(sigma_b_alt^2 + 3*tau_alt^2)
-vonmises_alt = sqrt(sigma_b_alt.^2 + 3*tau_alt.^2);
-vonmises_mean = sqrt(sigma_b_mean.^2 + 3*tau_mean.^2);
+
 
 
 % 7) Combined endurance limit
