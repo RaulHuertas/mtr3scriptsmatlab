@@ -80,8 +80,8 @@ Se_prime = sePrime(params.sigma_uts);
 
 % 'Se' ajustado para una pieza real(varial el k_c de cada uno)
 Se_bending =    Se_prime*k_a*k_b*k_c_bending*k_d*k_e*params.kf*params.kmisc;
-Se_axial =      Se_prime*k_a*k_b*k_c_axial*k_d*k_e*params.kf*params.kmis;
-Se_torsion =    Se_prime*k_a*k_b*k_c_torsion*k_d*k_e*params.kf*params.kmis;
+Se_axial =      Se_prime*k_a*k_b*k_c_axial*k_d*k_e*params.kf*params.kmisc;
+Se_torsion =    Se_prime*k_a*k_b*k_c_torsion*k_d*k_e*params.kf*params.kmisc;
 
 % Fracción de fuerz de fatiga
 %f = params.fatigue_strength_coefficient*power(2*params.Ne,params.fatigue_strength_exponent)/params.sigma_uts;
@@ -103,8 +103,8 @@ torque_stress_mid = params.Tm*(d/2)/PMI;
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%Esfuerzos de flexion%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-bending_stress_alt = params.TaMaltlt*(d/2)/PMI;
-bending_stress_mid = params.MmTm*(d/2)/PMI;
+bending_stress_alt = params.Malt*(d/2)/PMI;
+bending_stress_mid = params.Mm*(d/2)/PMI;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%Esfuerzos axial%%%
@@ -112,10 +112,48 @@ bending_stress_mid = params.MmTm*(d/2)/PMI;
 %Axial stress, asuming the user puts 3 times its weight 
 %on the plataform
 g = 9.8;
-axial_stress_max = params.user_weight*g*jump_factor;
+axial_stress_max = params.user_weight*g*params.jump_factor;
 axial_stress_alt = (axial_stress_max-0)/2;
 axial_stress_mid = (axial_stress_max+0)/2;
 
+%%Hallar coeficientes de von misses, Shingley tabla A-15
+r_over_d = params.shoulder_r/params.d;
+D_over_d = params.D/params.d;
+
+%Shigley, Formula 6-34
+Kf_tension = Kf(params.q_bending, params.kt_tension);
+Kf_torsion = Kf(params.q_torsion, params.kt_torsion);
+Kf_bending = Kf(params.q_bending, params.kt_bending);
+
+
+% Mostrar valores calculados hasta este punto
+notes = {};
+fprintf('Diameter d = %.6g m\n', d);
+fprintf('Surface finish = %s\n', surface);
+fprintf('k_a (surfac) = %.6g\n', k_a);
+fprintf('k_b (size) = %.6g\n', k_b);
+fprintf('k_c bending = %.6g\n', k_c_bending);
+fprintf('k_c axial = %.6g\n', k_c_axial);
+fprintf('k_c torsion = %.6g\n', k_c_torsion);
+fprintf('k_d (temperature) = %.6g\n', k_d);
+fprintf('k_e (reliability) = %.6g\n', k_e);
+fprintf('Se'' (lab) = %.6g Pa\n', Se_prime);
+fprintf('Se bending = %.6g Pa\n', Se_bending);
+fprintf('Se axial = %.6g Pa\n', Se_axial);
+fprintf('Se torsion = %.6g Pa\n', Se_torsion);
+fprintf('Shaft cross-sectional area = %.6g m^2\n', ShaftCrossArea);
+fprintf('Polar moment of inertia = %.6g m^4\n', PMI);
+fprintf('Torque stress (alt) = %.6g Pa\n', torque_stress_alt);
+fprintf('Torque stress (mid) = %.6g Pa\n', torque_stress_mid);
+fprintf('Bending stress (alt) = %.6g Pa\n', bending_stress_alt);
+fprintf('Bending stress (mid) = %.6g Pa\n', bending_stress_mid);
+fprintf('Axial stress (alt) = %.6g Pa\n', axial_stress_alt);
+fprintf('Axial stress (mid) = %.6g Pa\n', axial_stress_mid);
+fprintf('Shoulder radius ratio r/d = %.6g\n', r_over_d);
+fprintf('Shoulder radius ratio D/d = %.6g\n', D_over_d);
+fprintf('Kf_tension = %.6g\n', Kf_tension);
+fprintf('Kf_torsion = %.6g\n', Kf_torsion);
+fprintf('Kf_bending = %.6g\n', Kf_bending);
 
 
 

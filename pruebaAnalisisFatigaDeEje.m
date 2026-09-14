@@ -16,6 +16,7 @@ M_m = 0;       % Momento medio [N·m]
 T_a = 260.576 ; % Torque alternante [N·m]
 T_m = 0 ; % Torque 0[N·m]
 d   = 50*0.001;     % Diámetro del eje [m]
+D = 60*0.001;
 kf  = 1.0;      % Factor de concentración de la forma (ejemplo)
 kmisc  = 1.0;      % Factor de concentración de la forma (ejemplo)
 ka  = 1.0; kb = 1.0; kc = 1.0; kd = 1.0; ke = 1.0; % factores de Marin/others
@@ -29,6 +30,7 @@ params.surface_finish = 'machined';
 params.loading_type = 'combined';
 params.E   = E;
 params.d   = d;
+params.D   = D;
 params.kf  = kf;
 %params.ka = ka; 
 %params.kb = kb; 
@@ -45,8 +47,15 @@ params.Ne = 1e+06; %Queremos operar en la región que no hay fatiga(endurancej)
 params.temperature = 25;
 params.user_weight = 150;
 params.jump_factor = 3;%Al saltar, un atleta pone hasta 3 veces su peso sobre la superficie en la que salta
-
+params.shoulder_r = 5/1000; %Fillet en los hombros de los extremos del eje, para cálculo de kt y ks
 params.reliability = reliabilidad;
+params.kt_tension = 1.5;%Shingley tabla A-15
+params.kt_torsion = 1.35;%Shingley tabla A-15
+params.kt_bending = 1.65;%Shingley tabla A-15
+
+params.q_bending = 0.9;%Shingley tabla A-20. Puede usarse también para tracción/cargas axiales
+params.q_torsion = 0.9;%Shingley tabla A-21
+
 % Llamada a la función (ajustar según la firma real de fatigaEje)
 % Suponiendo que fatigaEje devuelve un struct 'result' con campos como 'Nf' (vida en ciclos) y 'SF' (factor de seguridad)
 result = fatigaEje(params);
