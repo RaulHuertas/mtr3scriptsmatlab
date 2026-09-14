@@ -136,7 +136,9 @@ firstCycle_max_stress = vonmises_alt+vonmises_mean
 SF_fatigue = Se_prime/firstCycle_max_stress;
 SF_firstCycle = params.sigma_y/firstCycle_max_stress;
 
-
+SF_tension_ASMEElliptic = safetyFactor_ASMEElliptic(vonmises_alt,vonmises_mean,Se_bending,params.sigma_y);
+SF_torsion_ASMEElliptic = safetyFactor_ASMEElliptic(vonmises_alt,vonmises_mean,Se_torsion,params.sigma_y);
+SF_bending_ASMEElliptic = safetyFactor_ASMEElliptic(vonmises_alt,vonmises_mean,Se_axial,params.sigma_y);
 
 % Mostrar valores calculados hasta este punto
 notes = {};
@@ -156,7 +158,7 @@ fprintf('Se bending = %.6g Pa\n', Se_bending);
 fprintf('Se axial = %.6g Pa\n', Se_axial);
 fprintf('Se torsion = %.6g Pa\n', Se_torsion);
 fprintf('Shaft cross-sectional area = %.6g m^2\n', ShaftCrossArea);
-fprintf('Polar moment of inertia = %.6g m^4\n', PMI);
+fprintf('Polar moment of inertia = %.6g \n', PMI);
 fprintf('Torque stress (alt) = %.6g Pa\n', torque_stress_alt);
 fprintf('Torque stress (mid) = %.6g Pa\n', torque_stress_mid);
 fprintf('Bending stress (alt) = %.6g Pa\n', bending_stress_alt);
@@ -173,54 +175,17 @@ fprintf('vonmises_mean = %.6g\n', vonmises_mean);
 fprintf('firstCycle_max_stress = %.6g\n', firstCycle_max_stress);
 fprintf('SF_fatigue = %.6g\n', SF_fatigue);
 fprintf('SF_firstCycle = %.6g\n', SF_firstCycle);
+fprintf('SF_tension_ASMEElliptic = %.6g\n', SF_tension_ASMEElliptic);
+fprintf('SF_torsion_ASMEElliptic = %.6g\n', SF_torsion_ASMEElliptic);
+fprintf('SF_bending_ASMEElliptic = %.6g\n', SF_bending_ASMEElliptic);
+fprintf('Bye!')
 
 return
-
-% 2) Von Mises equivalent stresses (amplitude and mean)
-% alternating equivalent (amplitude): sqrt(sigma_b_alt^2 + 3*tau_alt^2)
-
-
-
-% 7) Combined endurance limit
-Se_corrected = Se_prime * k_a * k_b * k_c * params.kf ;
-notes{end+1} = sprintf('Corrected endurance limit Se = %.3g Pa', Se_corrected);
-
-% 8) Mean stress correction using modified Goodman:
-% allowable alternating stress Sa such that Sa/Se + Smean/Sut <= 1
-Smean = vonmises_mean; % mean von Mises
-% Solve for allowable alternating amplitude Sa_all = (1 - Smean/UTS)*Se
-Sa_allow = (1 - Smean./UTS) * Se_corrected;
-% If Smean > UTS then zero or negative
-Sa_allow(Smean >= UTS) = 0;
-
-% Safety factor (fatigue) = Sa_allow / vonmises_alt
-% If vonmises_alt ==0 and Sa_allow>0, set safety factor = Inf
-sf = zeros(size(vonmises_alt));
-sf(vonmises_alt>0) = Sa_allow(vonmises_alt>0) ./ vonmises_alt(vonmises_alt>0);
-sf(vonmises_alt==0 & Sa_allow>0) = Inf;
-sf(Sa_allow<=0) = 0;
-
-% Endurance region test: vonmises_alt <= Sa_allow
-in_endurance = vonmises_alt <= Sa_allow;
-
-% 9) Static safety check (optional)
-if isfield(params,'factor_for_safety')
-    fac = params.factor_for_safety;
-    % compare vonmises_max = vonmises_mean + vonmises_alt to yield/SY
-    vonmises_max = vonmises_mean + vonmises_alt;
-    if max(vonmises_max) > SY/fac
-        notes{end+1} = sprintf('Warning: static safety factor %.2f not met.',fac);
-    else
-        notes{end+1} = sprintf('Static check passed for factor %.2f.',fac);
-    end
-end
-
 % Populate result
 result.se_nominal = vonmises_alt;
 result.se_equiv = Se_prime;
-result.k_surface = k_a;
-result.k_size = k_b;
-result.k_reliability = k_c;
+result.k_a = k_a;
+result.k_b = k_b;
 result.k_other = k_other;
 result.endurance_limit = Se_corrected;
 result.vonmises_alt = vonmises_alt;
