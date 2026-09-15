@@ -21,6 +21,6 @@ equation = (sigma_alt/Se)+ (sigma_mid/Sy)== 1/FS;
 all_solutions = solve(equation);
 
 %extraer la solución positiva
-n = max(all_solutions);
+n = double(max(all_solutions));
 
 end

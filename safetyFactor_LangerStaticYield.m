@@ -23,7 +23,7 @@ all_solutions = solve(equation);
 %disp(n)
 %fprintf("solve end")
 
-n = max(all_solutions);
+n = double(max(all_solutions));
 %extraer la solución positiva
 
 end
