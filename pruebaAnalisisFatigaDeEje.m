@@ -4,8 +4,8 @@ close all
 
 % Ejemplo de invocación de la función 'fatigaEje' usando parámetros del acero AISI 1045
 % Suposiciones comunes para AISI 1045 (valores típicos; ajustar según fuente):
-Sut = 630e+06;    % Resistencia última a tracción [Pa] 
-Sy  = 530e+06;   % Límite elástico [Pa] (0.5 obtenido de shingley)
+Sut = 630e+06;    % Resistencia última a tracción [Pa]  ( obtenido de shingley, tabla A-20)
+Sy  = 530e+06;   % Límite elástico [Pa] ( obtenido de shingley, tabla A-20)
 E   = 200e9;    % Módulo de Young [Pa]
 
 % Parámetros de carga/geométricos de ejemplo (ajustar según la firma de fatigaEje):
@@ -17,28 +17,19 @@ T_a = 260.576 ; % Torque alternante [N·m]
 T_m = 0 ; % Torque 0[N·m]
 d   = 50*0.001;     % Diámetro del eje [m]
 D = 60*0.001;
-kf  = 1.0;      % Factor de concentración de la forma (ejemplo)
-kmisc  = 1.0;      % Factor de concentración de la forma (ejemplo)
-ka  = 1.0; kb = 1.0; kc = 1.0; kd = 1.0; ke = 1.0; % factores de Marin/others
+kf  = 1.0;      % Factor miscelaneo(otros factores)
 reliabilidad = 0.99;
 % Construir estructura o lista de parámetros según la interfaz de fatigaEje
 params.sigma_uts = Sut;
 params.sigma_y = Sy;
 params.fatigue_strength_coefficient=1225e+06;% shigley tabla A-23 σ'F
 params.fatigue_strength_exponent=-0.095;% shigley tabla A-23 'b'
-params.surface_finish = 'machined';
+params.surface_finish = 'machined'
 params.loading_type = 'combined';
 params.E   = E;
 params.d   = d;
 params.D   = D;
-params.kf  = kf;
-%params.ka = ka; 
-%params.kb = kb; 
-%params.kc = kc; 
-%params.kd = kd; 
-%params.ke = ke; 
 params.kf = kf; 
-params.kmisc = kmisc; 
 params.Malt = M_a;
 params.Mm = M_m;
 params.Talt = T_a;

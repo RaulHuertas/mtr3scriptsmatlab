@@ -59,6 +59,9 @@ end
 k_c_bending = factor_kc('bending')
 k_c_axial = factor_kc('axial')
 k_c_torsion = factor_kc('torsion')
+% From Shingley, if there is more than 1 load, use Kc = 1. Differences
+% are taken into account by Von Mises stress calculation
+k_c = 1;
 
 % 4) Factor de Marin k_d(temperatura) shigley página 322
 k_d = temp_st_ratio(params.temperature);
@@ -79,9 +82,8 @@ end
 Se_prime = sePrime(params.sigma_uts);
 
 % 'Se' ajustado para una pieza real(varial el k_c de cada uno)
-Se_bending =    Se_prime*k_a*k_b*k_c_bending*k_d*k_e*params.kf*params.kmisc;
-Se_axial =      Se_prime*k_a*k_b*k_c_axial*k_d*k_e*params.kf*params.kmisc;
-Se_torsion =    Se_prime*k_a*k_b*k_c_torsion*k_d*k_e*params.kf*params.kmisc;
+Se =    Se_prime*k_a*k_b*k_c*k_d*k_e*params.kf;
+
 
 % Fracción de fuerz de fatiga
 %f = params.fatigue_strength_coefficient*power(2*params.Ne,params.fatigue_strength_exponent)/params.sigma_uts;
@@ -136,12 +138,12 @@ firstCycle_max_stress = vonmises_alt+vonmises_mean
 SF_fatigue = Se_prime/firstCycle_max_stress;
 SF_firstCycle = params.sigma_y/firstCycle_max_stress;
 
-SF_tension_ASMEElliptic = safetyFactor_ASMEElliptic(vonmises_alt,vonmises_mean,Se_bending,params.sigma_y);
-SF_torsion_ASMEElliptic = safetyFactor_ASMEElliptic(vonmises_alt,vonmises_mean,Se_torsion,params.sigma_y);
-SF_bending_ASMEElliptic = safetyFactor_ASMEElliptic(vonmises_alt,vonmises_mean,Se_axial,params.sigma_y);
+SF_ASMEElliptic = safetyFactor_ASMEElliptic(vonmises_alt,vonmises_mean,Se,params.sigma_y);
+SF_Langer = safetyFactor_LangerStaticYield(vonmises_alt,vonmises_mean,Se,params.sigma_y);
+SF_Soderberg = safetyFactor_Soderberg(vonmises_alt,vonmises_mean,Se,params.sigma_y);
+
 
 % Mostrar valores calculados hasta este punto
-notes = {};
 fprintf('Sut = %.6g Pa\n', params.sigma_uts);
 fprintf('Sy = %.6g Pa\n', params.sigma_y);
 fprintf('Diameter d = %.6g m\n', d);
@@ -154,9 +156,7 @@ fprintf('k_c torsion = %.6g\n', k_c_torsion);
 fprintf('k_d (temperature) = %.6g\n', k_d);
 fprintf('k_e (reliability) = %.6g\n', k_e);
 fprintf('Se'' (lab) = %.6g Pa\n', Se_prime);
-fprintf('Se bending = %.6g Pa\n', Se_bending);
-fprintf('Se axial = %.6g Pa\n', Se_axial);
-fprintf('Se torsion = %.6g Pa\n', Se_torsion);
+fprintf('Se = %.6g Pa\n', Se);
 fprintf('Shaft cross-sectional area = %.6g m^2\n', ShaftCrossArea);
 fprintf('Polar moment of inertia = %.6g \n', PMI);
 fprintf('Torque stress (alt) = %.6g Pa\n', torque_stress_alt);
@@ -175,9 +175,9 @@ fprintf('vonmises_mean = %.6g\n', vonmises_mean);
 fprintf('firstCycle_max_stress = %.6g\n', firstCycle_max_stress);
 fprintf('SF_fatigue = %.6g\n', SF_fatigue);
 fprintf('SF_firstCycle = %.6g\n', SF_firstCycle);
-fprintf('SF_tension_ASMEElliptic = %.6g\n', SF_tension_ASMEElliptic);
-fprintf('SF_torsion_ASMEElliptic = %.6g\n', SF_torsion_ASMEElliptic);
-fprintf('SF_bending_ASMEElliptic = %.6g\n', SF_bending_ASMEElliptic);
+fprintf('SF_tension_ASMEElliptic = %.6g\n', SF_ASMEElliptic);
+fprintf('SF_bending_Langer = %.6g\n', SF_Langer);
+fprintf('SF_bending_Soderberg = %.6g\n', SF_Soderberg);
 fprintf('Bye!')
 
 return
