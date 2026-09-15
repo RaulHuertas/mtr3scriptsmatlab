@@ -178,20 +178,36 @@ fprintf('SF_firstCycle = %.6g\n', SF_firstCycle);
 fprintf('SF_tension_ASMEElliptic = %.6g\n', SF_ASMEElliptic);
 fprintf('SF_bending_Langer = %.6g\n', SF_Langer);
 fprintf('SF_bending_Soderberg = %.6g\n', SF_Soderberg);
-fprintf('Bye!')
 
-return
 % Populate result
-result.se_nominal = vonmises_alt;
-result.se_equiv = Se_prime;
-result.k_a = k_a;
-result.k_b = k_b;
-result.k_other = k_other;
-result.endurance_limit = Se_corrected;
+result.d = d;
+result.surface = surface;
+result.k_c_bending = k_c_bending;
+result.k_c_axial = k_c_axial;
+result.k_c_torsion = k_c_torsion;
+result.k_d = k_d;
+result.k_e = k_e;
+result.Se_prime = Se_prime;
+result.ShaftCrossArea = ShaftCrossArea;
+result.PMI = PMI;
+result.torque_stress_alt = torque_stress_alt;
+result.torque_stress_mid = torque_stress_mid;
+result.bending_stress_alt = bending_stress_alt;
+result.bending_stress_mid = bending_stress_mid;
+result.axial_stress_alt = axial_stress_alt;
+result.axial_stress_mid = axial_stress_mid;
+result.r_over_d = r_over_d;
+result.D_over_d = D_over_d;
+result.Kf_tension = Kf_tension;
+result.Kf_torsion = Kf_torsion;
+result.Kf_bending = Kf_bending;
 result.vonmises_alt = vonmises_alt;
 result.vonmises_mean = vonmises_mean;
-result.in_endurance = in_endurance;
-result.safety_factor = sf;
-result.notes = notes;
+result.firstCycle_max_stress = firstCycle_max_stress;
+result.SF_fatigue = SF_fatigue;
+result.SF_firstCycle = SF_firstCycle;
+result.SF_ASMEElliptic = SF_ASMEElliptic;
+result.SF_Langer = SF_Langer;
+result.SF_Soderberg = SF_Soderberg;
 
 end
