@@ -63,7 +63,7 @@ ruido_valores2 = ruido_valores2*2/(maxRuido2-minRuido2);
 
 %Desplazamiento angular deseado
 tiempoSim = 10*tiempoTransicion;
-inclinacionMax = deg2rad(15);
+inclinacionMax = deg2rad(9);%%%%%%%%%INCLINACIÓN MÁXIMA
 secuencia_tiempoRef = linspace(0,tiempoSim, 11);%0:tiempoTransicion:10;
 secuencia_valoresRef = [0 0 inclinacionMax inclinacionMax 0 0 0 -inclinacionMax -inclinacionMax 0 0];
 secuencia_tiempo = 0:tiempoTransicion/2:tiempoSim;

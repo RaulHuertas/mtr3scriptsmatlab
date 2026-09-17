@@ -8,8 +8,7 @@ C = [ 1 0 ; 0 1];
 D = [0 ; 0];
 syms s k1 k2
 K = [k1  k2];
-retrasoDeseado = 1.0;
-tiempoTransicion = 0.5;
+retrasoDeseado = 2.0;
 p1 = -4/(retrasoDeseado);
 p2 = p1*10;
 polosDeseados = [p1 p2];
@@ -18,13 +17,13 @@ ecuDeseada = (s-p1)*(s-p2);
 ecuDeseada = expand(ecuDeseada);
 coefsEcuDeseada = sym2poly(ecuDeseada);
 ecuPolos = det(s*eye(2,2)-(A-B*K));
-K1 = coefsEcuDeseada(3)
-K2 = coefsEcuDeseada(2)
+K1 = coefsEcuDeseada(3);
+K2 = coefsEcuDeseada(2);
 display("Sistema observable: "+esObservableQ(A,C) );
 display("Sistema controlable: "+esControlableQ(A,B) );
 
 %Por el método ackerman
-Kacker = acker(A, B, polosDeseados)
+Kacker = acker(A, B, polosDeseados);
 Ak = A-B*Kacker;
 Bk = zeros(size(B));
 Ck = C;
@@ -55,10 +54,11 @@ intermedioRuido2 = (maxRuido2+minRuido2)/2;
 ruido_valores2 = ruido_valores2-intermedioRuido2*ones(1,nRuido);
 ruido_valores2 = ruido_valores2*2/(maxRuido2-minRuido2);
 %Desplazamiento angular deseado
+tiempoTransicion = 0.5;
 tiempoSim = 10*tiempoTransicion;
-inclinacionMax = deg2rad(15);
+inclinacionMax = deg2rad(9);%%%%%%%%%%%%%%%%%INCLINACIÓN MÁXIMA
 secuencia_tiempoRef = linspace(0,tiempoSim, 11);%0:tiempoTransicion:10;
-secuencia_valoresRef = [0 0 inclinacionMax inclinacionMax 0 0 0 -inclinacionMax -inclinacionMax 0 0];
+secuencia_valoresRef = [0 0 inclinacionMax inclinacionMax inclinacionMax 0 0 -inclinacionMax -inclinacionMax -inclinacionMax 0];
 secuencia_tiempo = 0:tiempoTransicion/2:tiempoSim;
 secuencia_valores = interp1(secuencia_tiempoRef, secuencia_valoresRef, secuencia_tiempo );
 secuenciaSuave_valores = secuencia_valores;

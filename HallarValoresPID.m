@@ -1,4 +1,5 @@
 close all;
+
 format SHORTG;
 %Se define la función de transferencia del motor SIN su lazo de control
 s = tf('s');
@@ -53,14 +54,19 @@ end
 disp("Soluciones iniciales(Control Velocidad, bucle 2): ")
 disp(soluciones2)
 
-
 csvwrite('PIDVelocidadSim1.csv',soluciones);
 csvwrite('PIDVelocidadSim2.csv',soluciones2);
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%CONTROL DE POSICION
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Control de posición, bucle 1
-KiWElegido = 12220;
+%KiWElegido = 12220;
+KiWElegido = 7000;
 motorConPIDVelocidad = feedback(KiWElegido*(1/s)*motor,1);
 rango = 0.1:10:100;
 sRangoPos1 = size(rango);
@@ -79,13 +85,15 @@ for KposCr = rango
                                 resultado.Peak ];
     indice = indice+1;
 end
-disp(solucionesPos1)
+disp("Soluciones iniciales(Control Posicion, bucle 1): ")
+disp(solucionesPos1);
 csvwrite('PIDPosiciónSim1.csv',solucionesPos1);
 
 
 
 %% Control de posición, bucle 2
-rango = 40:0.5:50;
+%rango = 40:0.5:50;
+rango = 0.1:0.5:30;
 sRangoPos2 = size(rango);
 indice = 1;
 solucionesPos2 = zeros(sRangoPos2(2), 5);
@@ -102,13 +110,19 @@ for KposCr = rango
                                 resultado.Peak ];
     indice = indice+1;
 end
+disp("Soluciones iniciales(Control Posicion, bucle 2): ")
 disp(solucionesPos2)
 csvwrite('PIDPosiciónSim2.csv',solucionesPos2);
 
 %% Simulacion PID posición
-KCriticaPosicion = 41.5;
+%KCriticaPosicion = 41.5;
+KCriticaPosicion = 21.6;
 motorConPIDPosicionFinal = feedback(KCriticaPosicion*motorConPIDVelocidad*(1/s), 1);
 step(motorConPIDPosicionFinal, 10)
+resultadoFinal = stepinfo(motorConPIDPosicionFinal);
+
+
+
 
 %Calculos coeficientes del PID
 pVelocidad = znHallarKPOfPController(KiWElegido);
@@ -117,13 +131,17 @@ disp("Coeficiente P del PID de velocidad: ")
 disp(pVelocidad)
 disp("Coeficiente P del PID de posición: ")
 disp(pPosicion)
+disp("Tiempo de subida final: ")
+disp(resultadoFinal.RiseTime)
 
 
 
-%
+
+%% Funciones Ziegher Nichols
 function y = znHallarKPOfPController(KCr)
     y = 0.5*KCr;
 end
+
 function [P,I] = znHallarKPIOfPIController(KCr, Tcr)
     P = 0.45*KCr;
     I = 0.45*Tcr;
