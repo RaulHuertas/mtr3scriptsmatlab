@@ -21,14 +21,14 @@ ecuDeseada = (s-p1)*(s-p2);
 ecuDeseada = expand(ecuDeseada);
 coefsEcuDeseada = sym2poly(ecuDeseada);
 ecuPolos = det(s*eye(2,2)-(A-B*K));
-K1 = coefsEcuDeseada(3)
-K2 = coefsEcuDeseada(2)
+K1 = coefsEcuDeseada(3);
+K2 = coefsEcuDeseada(2);
 display("Sistema observable: "+esObservableQ(A,C) );
 display("Sistema controlable: "+esControlableQ(A,B) );
 
 %Por el método ackerman
 
-Kacker = acker(A, B, polosDeseados)
+Kacker = acker(A, B, polosDeseados);
 Ak = A-B*Kacker;
 Bk = zeros(size(B));
 Ck = C;

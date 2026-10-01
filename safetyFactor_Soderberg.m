@@ -1,4 +1,4 @@
-function [n] = safetyFactor_Soderberg(sigma_alt, sigma_mid, Se, Sy)
+function [n] = safetyFactor_Soderburg(sigma_alt, sigma_mid, Se, Sy)
 %UNTITLED13 Summary of this function goes here
 %   Detailed explanation goes here
 arguments (Input)

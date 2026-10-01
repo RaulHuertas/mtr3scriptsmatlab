@@ -11,9 +11,9 @@ E   = 200e9;    % Módulo de Young [Pa]
 % Parámetros de carga/geométricos de ejemplo (ajustar según la firma de fatigaEje):
 % Aquí se asumen nombres de parámetros típicos: M_a (momento alternante), M_m (momento medio),
 % d (diámetro del eje), kf (factor de concentración de la forma), ka/kb/... (factores de modificación).
-M_a = 89.3775;      % Momento flector alternante [N·m]
+M_a = 243.551;      % Momento flector alternante [N·m]
 M_m = 0;       % Momento medio [N·m]
-T_a = 260.576 ; % Torque alternante [N·m]
+T_a = 252.416 ; % Torque alternante [N·m]
 T_m = 0 ; % Torque 0[N·m]
 d   = 50*0.001;     % Diámetro del eje [m]
 D = 60*0.001;
@@ -37,15 +37,15 @@ params.Tm = T_m;
 params.Ne = 1e+06; %Queremos operar en la región que no hay fatiga(endurancej)
 params.temperature = 25;
 params.user_weight = 150;
-params.jump_factor = 3;%Al saltar, un atleta pone hasta 3 veces su peso sobre la superficie en la que salta
+params.jump_factor = 0;%Al saltar, un atleta pone hasta 3 veces su peso sobre la superficie en la que salta
 params.shoulder_r = 5/1000; %Fillet en los hombros de los extremos del eje, para cálculo de kt y ks
 params.reliability = reliabilidad;
 params.kt_tension = 1.5;%Shingley tabla A-15
 params.kt_torsion = 1.35;%Shingley tabla A-15
 params.kt_bending = 1.65;%Shingley tabla A-15
 
-params.q_bending = 0.9;%Shingley tabla A-20. Puede usarse también para tracción/cargas axiales
-params.q_torsion = 0.9;%Shingley tabla A-21
+params.q_torsion = 0.9;%Shingley figura 6-21
+params.q_bending = 0.9;%Shingley figura 6-20. Puede usarse también para tracción/cargas axiales
 
 % Llamada a la función (ajustar según la firma real de fatigaEje)
 % Suponiendo que fatigaEje devuelve un struct 'result' con campos como 'Nf' (vida en ciclos) y 'SF' (factor de seguridad)

@@ -63,19 +63,27 @@ k_c_torsion = factor_kc('torsion')
 % are taken into account by Von Mises stress calculation
 k_c = 1;
 
-% 4) Factor de Marin k_d(temperatura) shigley página 322
+% 4) Factor de Marin k_d(temperatura) shigley página 299
 k_d = temp_st_ratio(params.temperature);
 
-% 5) Factor de Marin k_e (carga), Shigley's página 324
+% 5) Factor de Marin k_e (carga), Shigley's página 301
 k_e = 1.0;
-if  params.reliability >= 0.999
+if  params.reliability >= 99.9999/100
     k_e = 0.620;
-elseif params.reliability >= 0.99
+elseif params.reliability >= 99.999/100
+    k_e = 0.659;
+elseif params.reliability >= 99.99/100
+    k_e = 0.702;
+elseif params.reliability >= 99.9/100
+    k_e = 0.753;
+elseif params.reliability >= 99/100
     k_e = 0.814;
-elseif params.reliability >= 0.95
+elseif params.reliability >= 95/100
     k_e = 0.868;
-elseif params.reliability >= 0.90
+elseif params.reliability >= 90/100
     k_e = 0.897;
+elseif params.reliability >= 50/100
+    k_e = 1.0;
 end
 
 % Límite de fatiga Se', para una pieza de laboratorio
@@ -132,18 +140,23 @@ vonmises_alt = vonMosesAlt(Kf_bending,Kf_tension,Kf_torsion,bending_stress_alt,a
 vonmises_mean = vonMosesMean(Kf_bending,Kf_tension,Kf_torsion,bending_stress_mid,axial_stress_mid,torque_stress_mid);
 
 %Shigley pág 326
-firstCycle_max_stress = vonmises_alt+vonmises_mean
+firstCycle_max_stress = vonmises_alt+vonmises_mean;
 
 %safety factor for first cycle(static)
-SF_fatigue = Se_prime/firstCycle_max_stress;
 SF_firstCycle = params.sigma_y/firstCycle_max_stress;
+SF_fatigue = Se/firstCycle_max_stress;
 
 SF_ASMEElliptic = safetyFactor_ASMEElliptic(vonmises_alt,vonmises_mean,Se,params.sigma_y);
-SF_Langer = safetyFactor_LangerStaticYield(vonmises_alt,vonmises_mean,Se,params.sigma_y);
+SF_Langer = safetyFactor_LangerStaticYield(vonmises_alt,vonmises_mean,params.sigma_y);
 SF_Soderberg = safetyFactor_Soderberg(vonmises_alt,vonmises_mean,Se,params.sigma_y);
-
+SF_modGoodman = safetyFactor_modGoodman(vonmises_alt,vonmises_mean,Se,params.sigma_uts);
 
 % Mostrar valores calculados hasta este punto
+fprintf('Shaft cross-sectional area = %.6g m^2\n', ShaftCrossArea);
+fprintf('Polar moment of inertia = %.6g m^4\n', PMI);
+fprintf('axial_stress_max = %.6g Pa\n', axial_stress_max);
+fprintf('axial_stress_alt = %.6g Pa\n', axial_stress_alt);
+fprintf('axial_stress_mid = %.6g Pa\n', axial_stress_mid);
 fprintf('Sut = %.6g Pa\n', params.sigma_uts);
 fprintf('Sy = %.6g Pa\n', params.sigma_y);
 fprintf('Diameter d = %.6g m\n', d);
@@ -176,11 +189,13 @@ fprintf('firstCycle_max_stress = %.6g\n', firstCycle_max_stress);
 fprintf('SF_fatigue = %.6g\n', SF_fatigue);
 fprintf('SF_firstCycle = %.6g\n', SF_firstCycle);
 fprintf('SF_tension_ASMEElliptic = %.6g\n', SF_ASMEElliptic);
-fprintf('SF_bending_Langer = %.6g\n', SF_Langer);
+%fprintf('SF_bending_Langer = %.6g\n', SF_Langer);
 fprintf('SF_bending_Soderberg = %.6g\n', SF_Soderberg);
+fprintf('SF_bending_modGoodman = %.6g\n', SF_modGoodman);
 
 % Populate result
 result.d = d;
+result.D = params.D;
 result.surface = surface;
 result.k_c_bending = k_c_bending;
 result.k_c_axial = k_c_axial;
@@ -209,5 +224,6 @@ result.SF_firstCycle = SF_firstCycle;
 result.SF_ASMEElliptic = SF_ASMEElliptic;
 result.SF_Langer = SF_Langer;
 result.SF_Soderberg = SF_Soderberg;
+result.SF_modGoodman = SF_modGoodman;
 
 end

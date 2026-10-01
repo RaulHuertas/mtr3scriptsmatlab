@@ -66,7 +66,7 @@ csvwrite('PIDVelocidadSim2.csv',soluciones2);
 
 %% Control de posición, bucle 1
 %KiWElegido = 12220;
-KiWElegido = 7000;
+KiWElegido = 5500;
 motorConPIDVelocidad = feedback(KiWElegido*(1/s)*motor,1);
 rango = 0.1:10:100;
 sRangoPos1 = size(rango);
@@ -116,7 +116,7 @@ csvwrite('PIDPosiciónSim2.csv',solucionesPos2);
 
 %% Simulacion PID posición
 %KCriticaPosicion = 41.5;
-KCriticaPosicion = 21.6;
+KCriticaPosicion = 16.6;
 motorConPIDPosicionFinal = feedback(KCriticaPosicion*motorConPIDVelocidad*(1/s), 1);
 step(motorConPIDPosicionFinal, 10)
 resultadoFinal = stepinfo(motorConPIDPosicionFinal);

@@ -1,10 +1,9 @@
-function [n] = safetyFactor_LangerStaticYield(sigma_alt, sigma_mid, Se, Sy)
+function [n] = safetyFactor_LangerStaticYield(sigma_alt, sigma_mid,  Sy)
 %UNTITLED13 Summary of this function goes here
 %   Detailed explanation goes here
 arguments (Input)
     sigma_alt
     sigma_mid
-    Se
     Sy
 end
 
