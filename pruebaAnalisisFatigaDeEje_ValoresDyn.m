@@ -13,10 +13,10 @@ E   = 200e9;    % Módulo de Young [Pa]
 % d (diámetro del eje), kf (factor de concentración de la forma), ka/kb/... (factores de modificación).
 M_a = 243.551;      % Momento flector alternante [N·m]
 M_m = 0;       % Momento medio [N·m]
-T_a = 374.9418 ; % Torque alternante [N·m]
+T_a = 389.83 ; % Torque alternante [N·m]
 T_m = 0 ; % Torque 0[N·m]
-d   = 60*0.001;     % Diámetro del eje [m]
-D = 70*0.001;
+d   = 50*0.001;     % Diámetro del eje [m]
+D = 60*0.001;
 kf  = 1.0;      % Factor miscelaneo(otros factores)
 reliabilidad = 0.99;
 % Construir estructura o lista de parámetros según la interfaz de fatigaEje

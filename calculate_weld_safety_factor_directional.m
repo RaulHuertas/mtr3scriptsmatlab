@@ -34,6 +34,17 @@ function SF = calculate_weld_safety_factor_directional(F, theta_deg, L, z, d_eje
     SF      = min(SF_VM, SF_perp);
 
     % --- CONSOLE OUTPUT ---
+    
+    fprintf('N = %.2f N\n', N);
+    fprintf('V = %.2f N\n', V);
+    fprintf('M = %.2f N*mm\n', M);
+    fprintf('Nominal Stress (sigma_nom): %.2f MPa\n', sigma_nom);
+    fprintf('Directional Stresses: sigma_perp = %.2f MPa, tau_perp = %.2f MPa\n', sigma_perp, tau_perp);
+    fprintf('Parallel Shear Stress (tau_parallel): %.2f MPa\n', tau_parallel);
+    fprintf('Von Mises Applied Stress (sigma_VM): %.2f MPa\n', sigma_VM);
+    fprintf('Design Limit (f_vw_d_VM): %.2f MPa\n', f_vw_d_VM);
+    fprintf('Perpendicular Stress Limit: %.2f MPa\n', sigma_perp_limit);
+    fprintf('Safety Factors: SF_VM = %.2f, SF_perp = %.2f, SF = %.2f\n\n', SF_VM, SF_perp, SF);
     fprintf('Directional Stresses: sigma_perp = %.2f MPa, tau_perp = %.2f MPa\n', sigma_perp, tau_perp);
     fprintf('Von Mises Applied Stress (sigma_VM): %.2f MPa\n', sigma_VM);
     fprintf('Design Limit (f_vw_d_VM):            %.2f MPa\n', f_vw_d_VM);
