@@ -75,7 +75,7 @@ Mc  = 150.6;
 Im = 6.69606;
 Ic = 168.015;
 fm = 0.002;
-
+IShaft = 1.778e7;
 %inerciaAlrededorDelEjeDeGiro = Im+Mm*dm*dm;
 %inerciaAlrededorDelEjeDeGiro = inerciaAlrededorDelEjeDeGiro+Mc*((dm+dmc)*(dm+dmc)+(0.005*0.005));
 
@@ -93,7 +93,7 @@ mechanicalTimeConstant = 5.0/1000.0;
 te = electricalTimeConstant;
 tm = mechanicalTimeConstant;
 Bm = Jm/tm;% coeficiente de fricción viscosa
-
+Jeq = Jm+gramsCM2ToKgMeters2(IShaft)/relacionEngranajes;
 %PID posicion OK
 %P = 14.8934818231566
 %I = 43.4324652471544
@@ -102,7 +102,10 @@ Bm = Jm/tm;% coeficiente de fricción viscosa
 %P = 0
 %I = 12284.0124540325
 %D = 0
-
+fprintf('Jm = %.6g\n', Jm);
+fprintf('Jeq = %.6g\n', Jeq);
+%disp('Jm', Jm)
+%disp('Jeq', Jeq)
 
 %% Funciones auxiliares
 function observableQ = esObservableQ(A,C)

@@ -51,6 +51,41 @@ params.q_bending = 0.9;%Shingley figura 6-20. Puede usarse también para tracci�
 % Suponiendo que fatigaEje devuelve un struct 'result' con campos como 'Nf' (vida en ciclos) y 'SF' (factor de seguridad)
 result = fatigaEje(params);
 
+%%% SOLDADURA
+% 1. Define the applied load and joint geometry
+F         = 168*9.8;    % Applied downward load in Newtons (1500 N ~ 150 kg)
+theta_deg = 9;      % Angle of the tube relative to vertical in degrees
+L         = 1007;     % Lever arm distance from pivot to the load application point in mm
+z         = 4.5;     % Weld leg size in mm
+d_eje         = 44.45;   % Tube outer diameter in mm
+d_soporte     = 50.00;   % Tube outer diameter in mm
+f_u       = 630;     % Ultimate tensile strength of AISI 1045 base metal in MPa
+% Eurocode Constants
+beta_w    = 1.0;     % Correlation factor for high-strength steel
+gamma_M2  = 1.25;    % Partial safety factor for welds
+% 2. Call the function and assign the output to a variable
+SFWeld = calculate_weld_safety_factor_directional(F, theta_deg, L, z, d_eje,d_soporte,  f_u,beta_w, gamma_M2);
+
+
 % Mostrar resultados
-disp('Resultados de fatigaEje para AISI 1045, ASME Elliptic:');
-disp(result);
+%disp('Resultados de fatigaEje para AISI 1045, ASME Elliptic:');
+%disp(result);
+disp('Factores de seguridad del material de acuerdo a su fatiga: ')
+disp(result.SF_fatigue)
+disp('Factores de seguridad del material de acuerdo a su operación de primer ciclo: ')
+disp(result.SF_firstCycle)
+disp('Factores de seguridad del material de acuerdo a ASME Elliptic: ')
+disp(result.SF_ASMEElliptic)
+disp('Factores de seguridad del material de acuerdo a Langer: ')
+disp(result.SF_Langer)
+disp('Factores de seguridad del material de acuerdo a Soderberg: ')
+disp(result.SF_Soderberg)
+disp('Factores de seguridad del material de acuerdo a modGoodman: ')
+disp(result.SF_modGoodman)
+if SFWeld >= 1.5
+    disp('Weld Result: The weld is exceptionally safe for this load.');
+elseif SF >= 1.0
+    disp('Weld Result: The weld meets Eurocode 3 static strength requirements, but margin is low.');
+else
+    disp('Weld Result: WARNING - The weld is expected to fail. Redesign required.');
+end
