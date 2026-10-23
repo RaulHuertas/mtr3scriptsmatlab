@@ -7,7 +7,9 @@
 #include "tmwtypes.h"
 #include "simstruc_types.h"
 #else
+#define SIMPLIFIED_RTWTYPES_COMPATIBILITY
 #include "rtwtypes.h"
+#undef SIMPLIFIED_RTWTYPES_COMPATIBILITY
 #endif
 
 
@@ -27,9 +29,27 @@
 /* %%%-SFUNWIZ_wrapper_externs_Changes_END --- EDIT HERE TO _BEGIN */
 
 /*
+ * Start function
+ *
+ */
+extern void ControladorCambioDireccion_Start_wrapper(real_T *xD);
+
+void ControladorCambioDireccion_Start_wrapper(real_T *xD)
+{
+/* %%%-SFUNWIZ_wrapper_Start_Changes_BEGIN --- EDIT HERE TO _END */
+/*
+ * Custom Start code goes here.
+ */
+/* %%%-SFUNWIZ_wrapper_Start_Changes_END --- EDIT HERE TO _BEGIN */
+}
+/*
  * Output function
  *
  */
+extern void ControladorCambioDireccion_Outputs_wrapper(const real_T *entrada,
+			real_T *salida,
+			const real_T *xD);
+
 void ControladorCambioDireccion_Outputs_wrapper(const real_T *entrada,
 			real_T *salida,
 			const real_T *xD)
@@ -50,6 +70,10 @@ salida[0] = xD[0];
  * Updates function
  *
  */
+extern void ControladorCambioDireccion_Update_wrapper(const real_T *entrada,
+			real_T *salida,
+			real_T *xD);
+
 void ControladorCambioDireccion_Update_wrapper(const real_T *entrada,
 			real_T *salida,
 			real_T *xD)
@@ -63,7 +87,7 @@ void ControladorCambioDireccion_Update_wrapper(const real_T *entrada,
     real_T valorActual = xD[0];
     //const real_T valorMax =  0.1745;
     const real_T valorMax =  9*0.0174533;//el ultimo coeficente es para convertir sexagesimalesa a radianes
-    const real_T desplazamientoMax = valorMax/1000.0;
+    const real_T desplazamientoMax = valorMax*1.0/1000.0;
     real_T cambio = 0;
     const real_T comando = entrada[0];
     real_T posibleNuevoValor = 0;
@@ -91,7 +115,20 @@ void ControladorCambioDireccion_Update_wrapper(const real_T *entrada,
     if((posibleNuevoValor<=valorMax)&&(posibleNuevoValor >= -valorMax)){
         xD[0] += cambio;
     }
-    
 /* %%%-SFUNWIZ_wrapper_Update_Changes_END --- EDIT HERE TO _BEGIN */
+}
+/*
+ * Terminate function
+ *
+ */
+extern void ControladorCambioDireccion_Terminate_wrapper(real_T *xD);
+
+void ControladorCambioDireccion_Terminate_wrapper(real_T *xD)
+{
+/* %%%-SFUNWIZ_wrapper_Terminate_Changes_BEGIN --- EDIT HERE TO _END */
+/*
+ * Custom Terminate code goes here.
+ */
+/* %%%-SFUNWIZ_wrapper_Terminate_Changes_END --- EDIT HERE TO _BEGIN */
 }
 

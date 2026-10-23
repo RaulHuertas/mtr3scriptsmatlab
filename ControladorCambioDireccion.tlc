@@ -1,5 +1,5 @@
 %% File : ControladorCambioDireccion.tlc
-%% Created : Mon Jun 13 22:32:43 2022
+%% Created : 2026-10-23 15:42:06
 %%
 %% Description: 
 %%   Simulink Coder wrapper functions interface generated for 
@@ -21,7 +21,8 @@
 %%      Set up external references for wrapper functions in the 
 %%      generated code.
 %%
-%function BlockTypeSetup(block, system) Output
+%function BlockTypeSetup(block, system) void
+    %assign doubleType = LibGetDataTypeNameFromId(::CompiledModel.tSS_DOUBLE)
 
   %if IsModelReferenceSimTarget() || CodeFormat == "S-Function" || ::isRAccel
     %assign hFileName = "ControladorCambioDireccion_accel_wrapper"
@@ -34,59 +35,77 @@
     #ifdef MATLAB_MEX_FILE
     #include "tmwtypes.h"
     #else
-    #include "rtwtypes.h"
+    %<LibEmitPlatformTypeIncludes()>
     #endif
     #ifdef __cplusplus
     #define SFB_EXTERN_C extern "C"
     #else
     #define SFB_EXTERN_C extern
     #endif
-    SFB_EXTERN_C void ControladorCambioDireccion_Outputs_wrapper_accel(const real_T *entrada,
-			real_T *salida,
-			const real_T *xD);
-    SFB_EXTERN_C void ControladorCambioDireccion_Update_wrapper_accel(const real_T *entrada,
-			real_T *salida,
-			real_T *xD);
+    SFB_EXTERN_C void ControladorCambioDireccion_Start_wrapper_accel(%<doubleType> *xD);
+    SFB_EXTERN_C void ControladorCambioDireccion_Outputs_wrapper_accel(const %<doubleType> *entrada,
+			%<doubleType> *salida,
+			const %<doubleType> *xD);
+    SFB_EXTERN_C void ControladorCambioDireccion_Update_wrapper_accel(const %<doubleType> *entrada,
+			%<doubleType> *salida,
+			%<doubleType> *xD);
+    SFB_EXTERN_C void ControladorCambioDireccion_Terminate_wrapper_accel(%<doubleType> *xD);
     #undef SFB_EXTERN_C
     #endif
     %closefile hFile
 
     %assign cFileName = "ControladorCambioDireccion_accel_wrapper"
-    %openfile cFile = "%<cFileName>.c"
+    %if GenCPP
+        %openfile cFile = "%<cFileName>.cpp"
+    %else
+        %openfile cFile = "%<cFileName>.c"
+    %endif
     %selectfile cFile
     #include <string.h>
     #ifdef MATLAB_MEX_FILE
     #include "tmwtypes.h"
     #else
-    #include "rtwtypes.h"
+    %<LibEmitPlatformTypeIncludes()>
     #endif
     #include "%<hFileName>.h"
     
+    #ifdef __cplusplus
+    #define SFB_EXTERN_C extern "C"
+    #else
+    #define SFB_EXTERN_C extern
+    #endif
 
-    extern void ControladorCambioDireccion_Start_wrapper(real_T *xD);
-    extern void ControladorCambioDireccion_Outputs_wrapper(const real_T *entrada,
-			real_T *salida,
-			const real_T *xD);
-    extern void ControladorCambioDireccion_Terminate_wrapper(real_T *xD);
+    SFB_EXTERN_C void ControladorCambioDireccion_Start_wrapper(%<doubleType> *xD);
+    SFB_EXTERN_C void ControladorCambioDireccion_Outputs_wrapper(const %<doubleType> *entrada,
+			%<doubleType> *salida,
+			const %<doubleType> *xD);
+    SFB_EXTERN_C void ControladorCambioDireccion_Terminate_wrapper(%<doubleType> *xD);
 
-    extern void ControladorCambioDireccion_Update_wrapper(const real_T *entrada,
-			real_T *salida,
-			real_T *xD);
-    void ControladorCambioDireccion_Outputs_wrapper_accel(const real_T *entrada,
-			real_T *salida,
-			const real_T *xD){
+    SFB_EXTERN_C  void ControladorCambioDireccion_Update_wrapper(const %<doubleType> *entrada,
+			%<doubleType> *salida,
+			%<doubleType> *xD);
+    void ControladorCambioDireccion_Start_wrapper_accel(%<doubleType> *xD){
+    ControladorCambioDireccion_Start_wrapper(xD);
+    }
+    void ControladorCambioDireccion_Outputs_wrapper_accel(const %<doubleType> *entrada,
+			%<doubleType> *salida,
+			const %<doubleType> *xD){
     ControladorCambioDireccion_Outputs_wrapper(entrada,
 			salida,
 			xD);
     }
 
-    void ControladorCambioDireccion_Update_wrapper_accel(const real_T *entrada,
-			real_T *salida,
-			real_T *xD){
+    void ControladorCambioDireccion_Update_wrapper_accel(const %<doubleType> *entrada,
+			%<doubleType> *salida,
+			%<doubleType> *xD){
     ControladorCambioDireccion_Update_wrapper(entrada,
 			salida,
 			xD);
     }
+    void ControladorCambioDireccion_Terminate_wrapper_accel(%<doubleType> *xD){
+    ControladorCambioDireccion_Terminate_wrapper(xD);
+    }
+#undef SFB_EXTERN_C
 
     %closefile cFile
 
@@ -101,16 +120,16 @@
     #define SFB_EXTERN_C extern
     #endif
 
-    SFB_EXTERN_C void ControladorCambioDireccion_Start_wrapper(real_T *xD);
+    SFB_EXTERN_C void ControladorCambioDireccion_Start_wrapper(%<doubleType> *xD);
 
-    SFB_EXTERN_C void ControladorCambioDireccion_Outputs_wrapper(const real_T *entrada,
-			real_T *salida,
-			const real_T *xD);
-    SFB_EXTERN_C void ControladorCambioDireccion_Update_wrapper(const real_T *entrada,
-			real_T *salida,
-			real_T *xD);
+    SFB_EXTERN_C void ControladorCambioDireccion_Outputs_wrapper(const %<doubleType> *entrada,
+			%<doubleType> *salida,
+			const %<doubleType> *xD);
+    SFB_EXTERN_C void ControladorCambioDireccion_Update_wrapper(const %<doubleType> *entrada,
+			%<doubleType> *salida,
+			%<doubleType> *xD);
 
-    SFB_EXTERN_C void ControladorCambioDireccion_Terminate_wrapper(real_T *xD);
+    SFB_EXTERN_C void ControladorCambioDireccion_Terminate_wrapper(%<doubleType> *xD);
 
     #undef SFB_EXTERN_C
   %closefile externs
@@ -120,12 +139,18 @@
   %%
 %endfunction
 
+%% Function: BlockInstanceSetup ===============================================
+%%
+%function BlockInstanceSetup(block, system) void
+    %<LibEnableBlockFcnOptimizations(block)>
+%endfunction
 %% InitializeConditions =========================================================
 %%
 %function InitializeConditions(block, system) Output
+    %assign doubleType = LibGetDataTypeNameFromId(::CompiledModel.tSS_DOUBLE)
   /* %<Type> Block: %<Name> */
 {
-  real_T initVector[1] = {0};
+  %<doubleType> initVector[1] = {0};
   %assign rollVars = ["<dwork>/DSTATE"]
   %assign rollRegions = [0:%<LibBlockDWorkWidth(DSTATE)-1>]
   %roll sigIdx = rollRegions, lcv = 1, block, "Roller", rollVars
@@ -140,6 +165,19 @@
 
 %endfunction
 
+%% Function: Start ============================================================
+%%
+%function Start(block, system) Output
+   /* %<Type> Block: %<Name> */
+  %assign pxd = LibBlockDWorkAddr(DSTATE, "", "", 0)
+  
+  %if IsModelReferenceSimTarget() || CodeFormat == "S-Function" || ::isRAccel
+    ControladorCambioDireccion_Start_wrapper_accel(%<pxd>);
+  %else
+    ControladorCambioDireccion_Start_wrapper(%<pxd>);
+  %endif
+
+%endfunction
 %% Function: Outputs ==========================================================
 %%
 %% Purpose:
@@ -177,6 +215,19 @@
   %endif
 
   %%
+%endfunction
+%% Function: Terminate ========================================================
+%%
+%function Terminate(block, system) Output
+   /* %<Type> Block: %<Name> */
+  %assign pxd = LibBlockDWorkAddr(DSTATE, "", "", 0)
+  
+  %if IsModelReferenceSimTarget() || CodeFormat == "S-Function" || ::isRAccel
+    ControladorCambioDireccion_Terminate_wrapper_accel(%<pxd>);
+  %else
+    ControladorCambioDireccion_Terminate_wrapper(%<pxd>);
+  %endif
+
 %endfunction
 
 %% [EOF] ControladorCambioDireccion.tlc

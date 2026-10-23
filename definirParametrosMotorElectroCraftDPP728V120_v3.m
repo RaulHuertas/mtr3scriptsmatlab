@@ -93,7 +93,7 @@ mechanicalTimeConstant = 5.0/1000.0;
 te = electricalTimeConstant;
 tm = mechanicalTimeConstant;
 Bm = Jm/tm;% coeficiente de fricción viscosa
-Jeq = Jm+gramsCM2ToKgMeters2(IShaft)/relacionEngranajes;
+Jeq = Jm+gramsCM2ToKgMeters2(IShaft)/power(relacionEngranajes,2);
 %PID posicion OK
 %P = 14.8934818231566
 %I = 43.4324652471544

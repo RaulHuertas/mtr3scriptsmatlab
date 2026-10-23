@@ -9,7 +9,7 @@ motor = feedback(partA*partB,Kb)/relacionEngranajes;
 
 %% Primer bucle, estimaciones iniciales de Ki
 %Se define el intervalo de los valores de Ki
-rango = 0.1:100:2000;
+rango = 10000:200:15000;
 sRango = size(rango);
 %Se crea una tabla donde alamcenar resultados
 soluciones = zeros(sRango(2), 5);
@@ -32,13 +32,42 @@ end
 disp("Soluciones iniciales(Control Velocidad, bucle 1): ")
 disp(soluciones)
 
+
+%% Soluciones más refinadas 
+rango = 11200:100:11600;
+sRango2 = size(rango);
+%Se crea una tabla donde alamcenar resultados
+soluciones2 = zeros(sRango2(2), 5);
+indice = 1;
+%Se realiza la simulación por cada valor de Ki
+for Ki = rango
+    %Se define la función de transferencia del motor CONs su lazo de control
+    motorConPIDVelocidad = feedback(Ki*(1/s)*motor,1);
+    resultado = stepinfo(motorConPIDVelocidad);
+    %Se almacenan los resultados en las tablas
+    soluciones2(indice,:) = [    Ki, ...
+        resultado.RiseTime, ...
+        resultado.SettlingTime, ...
+        resultado.Overshoot, ...
+        resultado.Peak ];
+    indice = indice+1;
+end
+
 %Se muestra la tabla de resultados
-KiWElegido = 450;
-motorConPIDVelocidad = feedback(KiWElegido*(1/s)*motor,1);
+disp("Soluciones iniciales(Control Velocidad, bucle 2): ")
+disp(soluciones2)
+
+
+
+%Se muestra la tabla de resultados
+KiWElegido = 11600;
+motorConPIDVelocidad = feedback(znHallarKPOfPController(KiWElegido)*(1/s)*motor,1);
 figure(1)
 step(motorConPIDVelocidad, 10)
 
 csvwrite('PIDVelocidadSim1.csv',soluciones);
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -50,7 +79,7 @@ csvwrite('PIDVelocidadSim1.csv',soluciones);
 %% Control de posición, bucle 1
 %KiWElegido = 12220;
 
-rango = 0.1:0.2:5;
+rango = 0.1:10:100;
 sRangoPos1 = size(rango);
 indice = 1;
 solucionesPos1 = zeros(sRangoPos1(2), 5);
@@ -72,10 +101,9 @@ disp(solucionesPos1);
 csvwrite('PIDPosiciónSim1.csv',solucionesPos1);
 
 
-
 %% Control de posición, bucle 2
 %rango = 40:0.5:50;
-rango = 1:0.1:2;
+rango = 16:0.25:19;
 sRangoPos2 = size(rango);
 indice = 1;
 solucionesPos2 = zeros(sRangoPos2(2), 5);
@@ -98,7 +126,7 @@ csvwrite('PIDPosiciónSim2.csv',solucionesPos2);
 
 %% Simulacion PID posición
 %KCriticaPosicion = 41.5;
-KCriticaPosicion = 16.6;
+KCriticaPosicion = 17.5;
 motorConPIDPosicionFinal = feedback(KCriticaPosicion*motorConPIDVelocidad*(1/s), 1);
 figure(2);
 step(motorConPIDPosicionFinal, 10)
