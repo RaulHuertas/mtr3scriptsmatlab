@@ -1,5 +1,5 @@
 clc
-clear
+
 close all
 
 % Ejemplo de invocación de la función 'fatigaEje' usando parámetros del acero AISI 1045
@@ -15,8 +15,8 @@ M_a = 243.551;      % Momento flector alternante [N·m]
 M_m = 0;       % Momento medio [N·m]
 T_a = 252.416 ; % Torque alternante [N·m]
 T_m = 0 ; % Torque 0[N·m]
-d   = 50*0.001;     % Diámetro del eje [m]
-D = 60*0.001;
+d   = 60*0.001;     % Diámetro del eje [m]
+D = 65*0.001;
 kf  = 1.0;      % Factor miscelaneo(otros factores)
 reliabilidad = 0.99;
 % Construir estructura o lista de parámetros según la interfaz de fatigaEje
@@ -69,19 +69,19 @@ SFWeld = calculate_weld_safety_factor_directional(F, theta_deg, L, z, d_eje,d_so
 
 % Mostrar resultados
 %disp('Resultados de fatigaEje para AISI 1045, ASME Elliptic:');
-%disp(result);
-disp('Factores de seguridad del material de acuerdo a su fatiga: ')
-disp(result.SF_fatigue)
-disp('Factores de seguridad del material de acuerdo a su operación de primer ciclo: ')
-disp(result.SF_firstCycle)
-disp('Factores de seguridad del material de acuerdo a ASME Elliptic: ')
-disp(result.SF_ASMEElliptic)
-disp('Factores de seguridad del material de acuerdo a Langer: ')
-disp(result.SF_Langer)
-disp('Factores de seguridad del material de acuerdo a Soderberg: ')
-disp(result.SF_Soderberg)
-disp('Factores de seguridad del material de acuerdo a modGoodman: ')
-disp(result.SF_modGoodman)
+disp(result);
+% disp('Factores de seguridad del material de acuerdo a su fatiga: ')
+% disp(result.SF_fatigue)
+% disp('Factores de seguridad del material de acuerdo a su operación de primer ciclo: ')
+% disp(result.SF_firstCycle)
+% disp('Factores de seguridad del material de acuerdo a ASME Elliptic: ')
+% disp(result.SF_ASMEElliptic)
+% disp('Factores de seguridad del material de acuerdo a Langer: ')
+% disp(result.SF_Langer)
+% disp('Factores de seguridad del material de acuerdo a Soderberg: ')
+% disp(result.SF_Soderberg)
+% disp('Factores de seguridad del material de acuerdo a modGoodman: ')
+% disp(result.SF_modGoodman)
 if SFWeld >= 1.5
     disp('Weld Result: The weld is exceptionally safe for this load.');
 elseif SF >= 1.0

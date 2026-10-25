@@ -205,6 +205,10 @@ result.k_e = k_e;
 result.Se_prime = Se_prime;
 result.ShaftCrossArea = ShaftCrossArea;
 result.PMI = PMI;
+
+result.ShaftCrossArea_mm2 = ShaftCrossArea*1000*1000;
+result.PMI_mm4 = PMI*1000*1000;
+
 result.torque_stress_alt = torque_stress_alt;
 result.torque_stress_mid = torque_stress_mid;
 result.bending_stress_alt = bending_stress_alt;

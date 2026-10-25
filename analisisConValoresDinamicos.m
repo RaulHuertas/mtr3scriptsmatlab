@@ -13,7 +13,7 @@ E   = 200e9;    % Módulo de Young [Pa]
 % d (diámetro del eje), kf (factor de concentración de la forma), ka/kb/... (factores de modificación).
 M_a = 243.551;      % Momento flector alternante [N·m]
 M_m = 0;       % Momento medio [N·m]
-T_a = 693.7125 ; % Torque alternante [N·m]
+T_a = 746.7125 ; % Torque alternante [N·m]
 T_m = 0 ; % Torque 0[N·m]
 d   = 60*0.001;     % Diámetro del eje [m]
 D = 65*0.001;
