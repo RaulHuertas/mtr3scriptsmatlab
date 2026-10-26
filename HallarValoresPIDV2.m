@@ -18,7 +18,7 @@ disp('Funcion de transferencia del motor:')
 disp(motor)
 %% Primer bucle, estimaciones iniciales de Ki
 %Se define el intervalo de los valores de Ki
-rango = 0.01:0.005:0.02;
+rango = 0.00:10:100;
 sRango = size(rango);
 %Se crea una tabla donde alamcenar resultados
 soluciones = zeros(sRango(2), 5);
@@ -74,7 +74,7 @@ P_W =  0.6*K_ZG_W_Elegido*factorReductorDeEsfuerzo;
 I_W =  0.5*T_ZG_W_Elegido*0;
 D_W = 0.12*T_ZG_W_Elegido*0;
 figure(1)
-step(feedback(K_ZG_W_Elegido*(1)*motor,1),4)
+step(feedback(K_ZG_W_Elegido*(1)*motor,1),10)
 
 motorConPIDVelocidad = feedback(pidController(P_W,I_W,D_W,s)*motor,1);
 figure(2)

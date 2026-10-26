@@ -37,6 +37,9 @@ function SF = calculate_weld_safety_factor_directional(F, theta_deg, L, z, d_eje
     disp('WELDING ANALYSIS RESULTS')
     disp('WELDING ANALYSIS RESULTS')
     disp('WELDING ANALYSIS RESULTS')
+    fprintf('A_w = %.2f mm\n', A_w);
+    fprintf('W_w = %.2f mm\n', W_w);
+
     fprintf('d_throat_mm = %.2f mm\n', d);
     fprintf('N = %.2f N\n', N);
     fprintf('V = %.2f N\n', V);

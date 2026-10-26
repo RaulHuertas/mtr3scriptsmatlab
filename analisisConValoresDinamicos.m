@@ -13,7 +13,7 @@ E   = 200e9;    % Módulo de Young [Pa]
 % d (diámetro del eje), kf (factor de concentración de la forma), ka/kb/... (factores de modificación).
 M_a = 243.551;      % Momento flector alternante [N·m]
 M_m = 0;       % Momento medio [N·m]
-T_a = 746.7125 ; % Torque alternante [N·m]
+T_a = 746.5075 ; % Torque alternante [N·m]
 T_m = 0 ; % Torque 0[N·m]
 d   = 60*0.001;     % Diámetro del eje [m]
 D = 65*0.001;
@@ -53,9 +53,11 @@ result = fatigaEje(params);
 
 %%% SOLDADURA
 % 1. Define the applied load and joint geometry
-F         = 168*9.8;    % Applied downward load in Newtons (1500 N ~ 150 kg)
+Fdel         = 625.575;    % Applied downward load in Newtons (1500 N ~ 150 kg)
+Fpos         = 1021.413;
 theta_deg = 9;      % Angle of the tube relative to vertical in degrees
-L         = 1007;     % Lever arm distance from pivot to the load application point in mm
+L_del         = (0.80975-0.590983)*1000;     % Lever arm distance from pivot to the load application point in mm
+L_pos         = (0.80975-0.587122)*1000;     % Lever arm distance from pivot to the load application point in mm
 z         = 4.5;     % Weld leg size in mm
 d_eje         = 44.45;   % Tube outer diameter in mm
 d_soporte     = d*1000;   % Tube outer diameter in mm
@@ -64,19 +66,28 @@ f_u       = Sut/(1e6);     % Ultimate tensile strength of AISI 1045 base metal i
 beta_w    = 1.0;     % Correlation factor for high-strength steel
 gamma_M2  = 1.25;    % Partial safety factor for welds
 % 2. Call the function and assign the output to a variable
-SFWeld = calculate_weld_safety_factor_directional(F, theta_deg, L, z, d_eje,d_soporte,  f_u,beta_w, gamma_M2);
-
+SFWeldDel = calculate_weld_safety_factor_directional(Fdel, theta_deg, L_del, z, d_eje,d_soporte,  f_u,beta_w, gamma_M2);
+SFWeldPos = calculate_weld_safety_factor_directional(Fpos, theta_deg, L_pos, z, d_eje,d_soporte,  f_u,beta_w, gamma_M2);
 
 % Mostrar resultados
 disp('Resultados de fatigaEje para AISI 1045, ASME Elliptic:');
 disp(result);
-
+fprintf('L_del = %.2f \n', L_del);
+fprintf('L_pos = %.2f \n', L_pos);
+fprintf('SFWeldDel = %.2f \n', SFWeldDel);
+fprintf('SFWeldPos = %.2f \n', SFWeldPos);
 disp('Factores de seguridad de soldadura: ')
-disp(SFWeld)
-if SFWeld >= 1.5
-    disp('Weld Result: The weld is exceptionally safe for this load.');
+if SFWeldDel >= 1.5
+    disp('Soldadura delantera: The weld is exceptionally safe for this load.');
 elseif SF >= 1.0
-    disp('Weld Result: The weld meets Eurocode 3 static strength requirements, but margin is low.');
+    disp('Soldadura delantera: The weld meets Eurocode 3 static strength requirements, but margin is low.');
 else
-    disp('Weld Result: WARNING - The weld is expected to fail. Redesign required.');
+    disp('Soldadura delantera: WARNING - The weld is expected to fail. Redesign required.');
+end
+if SFWeldPos >= 1.5
+    disp('Soldadura posterior: The weld is exceptionally safe for this load.');
+elseif SF >= 1.0
+    disp('Soldadura posterior: The weld meets Eurocode 3 static strength requirements, but margin is low.');
+else
+    disp('Soldadura posterior: WARNING - The weld is expected to fail. Redesign required.');
 end
