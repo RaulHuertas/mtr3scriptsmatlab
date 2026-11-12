@@ -35,7 +35,7 @@ params.Mm = M_m;
 params.Talt = T_a;
 params.Tm = T_m;
 params.Ne = 1e+06; %Queremos operar en la región que no hay fatiga(endurancej)
-params.temperature = 25;
+params.temperature = 60;
 params.user_weight = 150;
 params.jump_factor = 0;%Al saltar, un atleta pone hasta 3 veces su peso sobre la superficie en la que salta
 params.shoulder_r = 5/1000; %Fillet en los hombros de los extremos del eje, para cálculo de kt y ks
@@ -56,8 +56,10 @@ result = fatigaEje(params);
 Fdel         = 625.575;    % Applied downward load in Newtons (1500 N ~ 150 kg)
 Fpos         = 1021.413;
 theta_deg = 9;      % Angle of the tube relative to vertical in degrees
-L_del         = (0.80975-0.590983)*1000;     % Lever arm distance from pivot to the load application point in mm
-L_pos         = (0.80975-0.587122)*1000;     % Lever arm distance from pivot to the load application point in mm
+%L_del         = (0.80975-0.590983)*1000;     % Lever arm distance from pivot to the load application point in mm
+%L_pos         = (0.80975-0.587122)*1000;     % Lever arm distance from pivot to the load application point in mm
+L_del         = (1041);     % Lever arm distance from pivot to the load application point in mm
+L_pos         = (1041);     % Lever arm distance from pivot to the load application point in mm
 z         = 4.5;     % Weld leg size in mm
 d_eje         = 44.45;   % Tube outer diameter in mm
 d_soporte     = d*1000;   % Tube outer diameter in mm
@@ -91,3 +93,4 @@ elseif SF >= 1.0
 else
     disp('Soldadura posterior: WARNING - The weld is expected to fail. Redesign required.');
 end
+

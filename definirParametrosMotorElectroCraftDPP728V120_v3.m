@@ -27,7 +27,7 @@ Kacker = acker(A, B, polosDeseados);
 Ak = A-B*Kacker;
 Bk = zeros(size(B));
 Ck = C;
-Dk = D;
+Dk = D;s
 sistemaControlado = ss(Ak, Bk, Ck, Dk);
 
 damp(sistemaControlado);

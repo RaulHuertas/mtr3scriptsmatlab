@@ -1,5 +1,4 @@
 clc
-
 close all
 
 % Ejemplo de invocación de la función 'fatigaEje' usando parámetros del acero AISI 1045

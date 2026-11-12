@@ -71,7 +71,7 @@ csvwrite('PIDVelocidadSim2.csv',soluciones2);
 K_ZG_W_Elegido = 80.0;
 T_ZG_W_Elegido = (0.0182-0.00621);
 P_W =  0.6*K_ZG_W_Elegido*factorReductorDeEsfuerzo;
-I_W =  0.5*T_ZG_W_Elegido*0;
+I_W =  0.5*T_ZG_W_Elegido;
 D_W = 0.12*T_ZG_W_Elegido*0;
 figure(1)
 step(feedback(K_ZG_W_Elegido*(1)*motor,1),10)
@@ -146,7 +146,7 @@ KCriticaPosicion = 327.5;
 K_ZG_Pos_Elegido = 500.5;
 T_ZG_Pos_Elegido = (0.0255-0.0115);
 P_Pos =  0.6*K_ZG_Pos_Elegido*factorReductorDeEsfuerzo;
-I_Pos =  0.5*T_ZG_Pos_Elegido*0;
+I_Pos =  0.5*T_ZG_Pos_Elegido;
 D_Pos = 0.12*T_ZG_Pos_Elegido*0;
 motorConPIDPosicionFinal = feedback(pidController(P_Pos,I_Pos,D_Pos,s)*motorConPIDVelocidad*(1/s), 1);
 figure(3);

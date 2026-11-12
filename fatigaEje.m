@@ -68,21 +68,21 @@ k_d = temp_st_ratio(params.temperature);
 
 % 5) Factor de Marin k_e (carga), Shigley's página 301
 k_e = 1.0;
-if  params.reliability >= 99.9999/100
+if  params.reliability >= 0.999999
     k_e = 0.620;
-elseif params.reliability >= 99.999/100
+elseif params.reliability >= 0.99999
     k_e = 0.659;
-elseif params.reliability >= 99.99/100
+elseif params.reliability >= 0.9999
     k_e = 0.702;
-elseif params.reliability >= 99.9/100
+elseif params.reliability >= 0.999
     k_e = 0.753;
-elseif params.reliability >= 99/100
+elseif params.reliability >= 0.99
     k_e = 0.814;
-elseif params.reliability >= 95/100
+elseif params.reliability >= 0.95
     k_e = 0.868;
-elseif params.reliability >= 90/100
+elseif params.reliability >= 0.90
     k_e = 0.897;
-elseif params.reliability >= 50/100
+elseif params.reliability >= 0.50
     k_e = 1.0;
 end
 
@@ -102,7 +102,7 @@ Se =    Se_prime*k_a*k_b*k_c*k_d*k_e*params.kf;
 % De Shigley pag 314:The slope of the load line shown is defined as Sa/Sm
 
 ShaftCrossArea = pi*(d/2)^2;
-PMI =  pi*(d^4)/32;%%Polar moment of inertia
+PMI =  pi*(d^4)/64;%%Polar moment of inertia
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%Esfuerzos de torsion%%%
